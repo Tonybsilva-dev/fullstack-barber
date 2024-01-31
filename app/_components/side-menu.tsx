@@ -4,7 +4,13 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { SheetHeader, SheetTitle } from "./ui/sheet";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
-import { CalendarIcon, HomeIcon, LogInIcon, LogOutIcon, UserIcon } from "lucide-react";
+import {
+  CalendarIcon,
+  HomeIcon,
+  LogInIcon,
+  LogOutIcon,
+  UserIcon,
+} from "lucide-react";
 import Link from "next/link";
 
 const SideMenu = () => {
@@ -23,9 +29,18 @@ const SideMenu = () => {
       {data?.user ? (
         <div className="flex justify-between px-5 py-6 items-center">
           <div className="flex items-center gap-3">
-            <Avatar>
-              <AvatarImage src={data.user?.image ?? "https://media.istockphoto.com/id/1477583639/vector/user-profile-icon-vector-avatar-or-person-icon-profile-picture-portrait-symbol-vector.jpg?b=1&s=170667a&w=0&k=20&c=ypchJpgwX1t_Zwx9KuwvKZ5ZrY24XgdZUFgAO8g7Qlk="} />
-            </Avatar>
+            {data?.user.image ? (
+              <Avatar>
+                <AvatarImage
+                  src={data.user?.image ?? ""}
+                  alt={
+                    data.user.name ?? `User profile image of ${data.user.name}`
+                  }
+                />
+              </Avatar>
+            ) : (
+              <UserIcon size={32} />
+            )}
 
             <h2 className="font-bold">{data.user.name}</h2>
           </div>
@@ -40,7 +55,11 @@ const SideMenu = () => {
             <UserIcon size={32} />
             <h2 className="font-bold">Olá, faça seu login!</h2>
           </div>
-          <Button variant="secondary" className="w-full justify-start" onClick={handleLoginClick}>
+          <Button
+            variant="secondary"
+            className="w-full justify-start"
+            onClick={handleLoginClick}
+          >
             <LogInIcon className="mr-2" size={18} />
             Fazer Login
           </Button>

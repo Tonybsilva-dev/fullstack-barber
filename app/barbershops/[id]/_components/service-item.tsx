@@ -13,12 +13,13 @@ import {
 } from "@/app/_components/ui/sheet";
 import { Barbershop, Service } from "@prisma/client";
 import { ptBR } from "date-fns/locale";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { GenerateDayTimeList } from "../_helpers/hours";
 import { formatCurrencyToBRL } from "../_helpers/format";
-import { format } from "date-fns";
+import { format, setHours, setMinutes } from "date-fns";
+import { saveBookings } from "../_actions/save-booking";
 
 interface ServiceItemProps {
   barberShop: Barbershop;
@@ -31,8 +32,30 @@ const ServiceItem = ({
   isAuthenticated,
   barberShop,
 }: ServiceItemProps) => {
+
+  const { data } = useSession()
+
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<string | undefined>();
+
+  const handleBookingSubmit = async () => {
+    if (!hour || !date || !data?.user) return;
+
+    try {
+      const dateHour = Number(hour.split(':')[0])
+      const dateMinutes = Number(hour.split(':')[1])
+
+      const newDate = setMinutes(setHours(date, dateHour), dateMinutes)
+
+
+      await saveBookings({
+        serviceId: service.id,
+        barbershopId: barberShop.id,
+        date: newDate,
+        userId: (data.user as any).id
+      });
+    } catch (error) {}
+  };
 
   const handleDateClick = (date: Date | undefined) => {
     setDate(date);
@@ -175,7 +198,7 @@ const ServiceItem = ({
                   </div>
 
                   <SheetFooter className="px-5 mb-5">
-                    <Button disabled={!hour || !date}>Confirmar reserva</Button>
+                    <Button onClick={handleBookingSubmit} disabled={!hour || !date}>Confirmar reserva</Button>
                   </SheetFooter>
                 </SheetContent>
               </Sheet>

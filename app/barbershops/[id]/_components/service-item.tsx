@@ -20,6 +20,8 @@ import { GenerateDayTimeList } from "../_helpers/hours";
 import { formatCurrencyToBRL } from "../_helpers/format";
 import { format, setHours, setMinutes } from "date-fns";
 import { saveBookings } from "../_actions/save-booking";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface ServiceItemProps {
   barberShop: Barbershop;
@@ -32,29 +34,46 @@ const ServiceItem = ({
   isAuthenticated,
   barberShop,
 }: ServiceItemProps) => {
-
-  const { data } = useSession()
+  const { data } = useSession();
 
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<string | undefined>();
+  const [submitIsLoading, setSubmitIsLoading] = useState<boolean>(false);
+  const [sheetsIsOpen, setSheetIsOpen] = useState<boolean>(false)
 
   const handleBookingSubmit = async () => {
+    setSubmitIsLoading(true);
     if (!hour || !date || !data?.user) return;
 
     try {
-      const dateHour = Number(hour.split(':')[0])
-      const dateMinutes = Number(hour.split(':')[1])
+      const dateHour = Number(hour.split(":")[0]);
+      const dateMinutes = Number(hour.split(":")[1]);
 
-      const newDate = setMinutes(setHours(date, dateHour), dateMinutes)
-
+      const newDate = setMinutes(setHours(date, dateHour), dateMinutes);
 
       await saveBookings({
         serviceId: service.id,
         barbershopId: barberShop.id,
         date: newDate,
-        userId: (data.user as any).id
+        userId: (data.user as any).id,
       });
-    } catch (error) {}
+
+      toast("Reserva realizada com sucesso!", {
+        description: format(newDate, "'para' dd 'de' MMMM 'ás' HH':'mm'.'", {
+          locale: ptBR
+        }),
+        action: {
+          label: "Visualizar",
+          onClick:() => console.log('Saved'),
+        }
+      })
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitIsLoading(false);
+      setSheetIsOpen(false);
+    }
   };
 
   const handleDateClick = (date: Date | undefined) => {
@@ -101,7 +120,7 @@ const ServiceItem = ({
                 {formatCurrencyToBRL(Number(service.price))}
               </p>
 
-              <Sheet>
+              <Sheet open={sheetsIsOpen} onOpenChange={setSheetIsOpen}>
                 <SheetTrigger asChild>
                   <Button variant="secondary" onClick={handleBookingClick}>
                     Reservar
@@ -198,7 +217,17 @@ const ServiceItem = ({
                   </div>
 
                   <SheetFooter className="px-5 mb-5">
-                    <Button onClick={handleBookingSubmit} disabled={!hour || !date}>Confirmar reserva</Button>
+                    <Button
+                      onClick={handleBookingSubmit}
+                      disabled={!hour || !date || submitIsLoading}
+                    >
+                      {submitIsLoading && (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      )}
+                      {!submitIsLoading && (
+                        "Confirmar reserva"
+                      )}                      
+                    </Button>
                   </SheetFooter>
                 </SheetContent>
               </Sheet>

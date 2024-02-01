@@ -39,7 +39,7 @@ const ServiceItem = ({
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<string | undefined>();
   const [submitIsLoading, setSubmitIsLoading] = useState<boolean>(false);
-  const [sheetsIsOpen, setSheetIsOpen] = useState<boolean>(false)
+  const [sheetsIsOpen, setSheetIsOpen] = useState<boolean>(false);
 
   const handleBookingSubmit = async () => {
     setSubmitIsLoading(true);
@@ -60,19 +60,20 @@ const ServiceItem = ({
 
       toast("Reserva realizada com sucesso!", {
         description: format(newDate, "'para' dd 'de' MMMM 'ás' HH':'mm'.'", {
-          locale: ptBR
+          locale: ptBR,
         }),
         action: {
           label: "Visualizar",
-          onClick:() => console.log('Saved'),
-        }
-      })
-
+          onClick: () => console.log("Saved"),
+        },
+      });
     } catch (error) {
       console.log(error);
     } finally {
       setSubmitIsLoading(false);
       setSheetIsOpen(false);
+      setHour(undefined)
+      setDate(undefined)
     }
   };
 
@@ -224,9 +225,7 @@ const ServiceItem = ({
                       {submitIsLoading && (
                         <Loader2 className="h-4 w-4 animate-spin" />
                       )}
-                      {!submitIsLoading && (
-                        "Confirmar reserva"
-                      )}                      
+                      {!submitIsLoading && "Confirmar reserva"}
                     </Button>
                   </SheetFooter>
                 </SheetContent>

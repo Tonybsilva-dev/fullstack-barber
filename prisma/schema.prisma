@@ -2,12 +2,25 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider       = "prisma-client-js"
+  bindaryTargets = ["native", "darwin"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./fullstack-barber-ERD.svg"
+  theme    = "forest"
+}
+
+generator dbml {
+  provider   = "prisma-dbml-generator"
+  output     = "./dbml.dbml"
+  outputName = "fullstack-barber.dbml"
 }
 
 model User {

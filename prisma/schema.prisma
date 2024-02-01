@@ -17,11 +17,11 @@ generator erd {
   theme    = "forest"
 }
 
-generator dbml {
-  provider   = "prisma-dbml-generator"
-  output     = "./dbml.dbml"
-  outputName = "fullstack-barber.dbml"
-}
+// generator dbml {
+//   provider   = "prisma-dbml-generator"
+//   output     = "./dbml.dbml"
+//   outputName = "fullstack-barber.dbml"
+// }
 
 model User {
   id            String    @id @default(cuid())

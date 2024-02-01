@@ -22,6 +22,7 @@ import { format, setHours, setMinutes } from "date-fns";
 import { saveBookings } from "../_actions/save-booking";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter } from "next/router";
 
 interface ServiceItemProps {
   barberShop: Barbershop;
@@ -34,6 +35,7 @@ const ServiceItem = ({
   isAuthenticated,
   barberShop,
 }: ServiceItemProps) => {
+  const router = useRouter()
   const { data } = useSession();
 
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -64,7 +66,7 @@ const ServiceItem = ({
         }),
         action: {
           label: "Visualizar",
-          onClick: () => console.log("Saved"),
+          onClick: () => router.push('/bookings'),
         },
       });
     } catch (error) {

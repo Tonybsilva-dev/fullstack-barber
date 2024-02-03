@@ -4,6 +4,7 @@ import "./globals.css";
 import Footer from "./_components/footer";
 import AuthProvider from "./_providers/auth";
 import { Toaster } from "./_components/ui/sonner";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body className={`${inter.className} dark`}>
         <AuthProvider>
           {children}
+          <Analytics />
           <Toaster />
           <Footer />
         </AuthProvider>

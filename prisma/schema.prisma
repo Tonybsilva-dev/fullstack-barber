@@ -11,11 +11,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-  output   = "./fullstack-barber-ERD.svg"
-  theme    = "forest"
-}
+// generator erd {
+//   provider = "prisma-erd-generator"
+//   output   = "./fullstack-barber-ERD.svg"
+//   theme    = "forest"
+// }
 
 // generator dbml {
 //   provider   = "prisma-dbml-generator"

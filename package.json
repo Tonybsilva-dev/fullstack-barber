@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "prisma generate",
-    "postinstall": "npx prisma db seed"
+    "prisma:deploy": "prisma migrate deploy",
+    "prisma:seed": "prisma db seed"
+    "postinstall": "prisma migrate deploy && prisma db seed",
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"

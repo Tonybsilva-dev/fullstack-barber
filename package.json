@@ -1,5 +1,5 @@
 {
-  "name": "a-barber",
+  "name": "asynnc-barber",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "prisma generate"
+    "prepare": "prisma generate",
+    "postinstall": "npx prisma db seed"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
